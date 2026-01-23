@@ -28,6 +28,21 @@ export default function BookList({ initialBooks, pagination, filters }: Props) {
     window.location.href = `/?${params.toString()}`;
   };
 
+  const buildPaginationUrl = (page: number) => {
+    const params = new URLSearchParams();
+    
+    params.append('page', page.toString());
+    
+    if (filters.title) params.append('title', filters.title);
+    if (filters.author) params.append('author', filters.author);
+    if (filters.category) params.append('category', filters.category);
+    if (filters.year_from) params.append('year_from', filters.year_from.toString());
+    if (filters.year_to) params.append('year_to', filters.year_to.toString());
+    if (filters.stock_filter) params.append('stock_filter', filters.stock_filter);
+    
+    return `/?${params.toString()}`;
+  };
+
   return (
     <div>
       {/* Barra de búsqueda y filtros */}
@@ -58,23 +73,22 @@ export default function BookList({ initialBooks, pagination, filters }: Props) {
               value={filters.author || ""}
               class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-                         <select
-                name="category"
-                class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">Todas las categorías</option>
-                {categories.map(cat => (
-                  <option value={cat} selected={filters.category === cat}>
-                    {cat}
-                  </option>
-                ))}
-              </select>
-
+            <select
+              name="category"
+              class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Todas las categorías</option>
+              {categories.map(cat => (
+                <option value={cat} selected={filters.category === cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
           </div>
 
           {showFilters.value && (
             <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-               <input
+              <input
                 type="number"
                 name="year_from"
                 placeholder="Año desde"
@@ -144,48 +158,56 @@ export default function BookList({ initialBooks, pagination, filters }: Props) {
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-              {initialBooks.map((book) => (
-                <tr key={book.id}>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {book.title}
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {book.author}
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {book.publisher}
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
-                      {book.category}
-                    </span>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {book.publication_year}
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <span class={`px-2 py-1 rounded-full text-xs ${
-                      book.stock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                    }`}>
-                      {book.stock} unidades
-                    </span>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <a
-                      href={`/books/${book.id}`}
-                      class="text-blue-600 hover:text-blue-900 mr-3"
-                    >
-                      Ver
-                    </a>
-                    <a
-                      href={`/books/${book.id}/edit`}
-                      class="text-indigo-600 hover:text-indigo-900 mr-3"
-                    >
-                      Editar
-                    </a>
+              {initialBooks.length === 0 ? (
+                <tr>
+                  <td colSpan={7} class="px-6 py-8 text-center text-gray-500">
+                    No se encontraron libros con los filtros aplicados
                   </td>
                 </tr>
-              ))}
+              ) : (
+                initialBooks.map((book) => (
+                  <tr key={book.id}>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      {book.title}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {book.author}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {book.publisher}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
+                        {book.category}
+                      </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {book.publication_year}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <span class={`px-2 py-1 rounded-full text-xs ${
+                        book.stock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                      }`}>
+                        {book.stock} unidades
+                      </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <a
+                        href={`/books/${book.id}`}
+                        class="text-blue-600 hover:text-blue-900 mr-3"
+                      >
+                        Ver
+                      </a>
+                      <a
+                        href={`/books/${book.id}/edit`}
+                        class="text-indigo-600 hover:text-indigo-900 mr-3"
+                      >
+                        Editar
+                      </a>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -203,15 +225,47 @@ export default function BookList({ initialBooks, pagination, filters }: Props) {
             <div class="flex gap-2">
               {pagination.current_page > 1 && (
                 <a
-                  href={`/?page=${pagination.current_page - 1}`}
+                  href={buildPaginationUrl(pagination.current_page - 1)}
                   class="px-4 py-2 border rounded-lg hover:bg-gray-100"
                 >
                   Anterior
                 </a>
               )}
+              
+              {/* Números de página */}
+              <div class="flex gap-1">
+                {Array.from({ length: pagination.last_page }, (_, i) => i + 1).map(pageNum => {
+                  if (
+                    pageNum === 1 ||
+                    pageNum === pagination.last_page ||
+                    (pageNum >= pagination.current_page - 1 && pageNum <= pagination.current_page + 1)
+                  ) {
+                    return (
+                      <a
+                        key={pageNum}
+                        href={buildPaginationUrl(pageNum)}
+                        class={`px-4 py-2 border rounded-lg ${
+                          pageNum === pagination.current_page
+                            ? 'bg-blue-600 text-white border-blue-600'
+                            : 'hover:bg-gray-100'
+                        }`}
+                      >
+                        {pageNum}
+                      </a>
+                    );
+                  } else if (
+                    pageNum === pagination.current_page - 2 ||
+                    pageNum === pagination.current_page + 2
+                  ) {
+                    return <span key={pageNum} class="px-2 py-2">...</span>;
+                  }
+                  return null;
+                })}
+              </div>
               {pagination.current_page < pagination.last_page && (
                 <a
-                  href={`/?page=${pagination.current_page + 1}`}
+                
+                  href={buildPaginationUrl(pagination.current_page + 1)}
                   class="px-4 py-2 border rounded-lg hover:bg-gray-100"
                 >
                   Siguiente
