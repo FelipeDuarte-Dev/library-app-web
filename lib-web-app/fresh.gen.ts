@@ -11,6 +11,7 @@ import * as $index from "./routes/index.tsx";
 import * as $BookDetail from "./islands/BookDetail.tsx";
 import * as $BookForm from "./islands/BookForm.tsx";
 import * as $BookList from "./islands/BookList.tsx";
+import * as $StockManager from "./islands/StockManager.tsx";
 import type { Manifest } from "$fresh/server.ts";
 
 const manifest = {
@@ -26,6 +27,7 @@ const manifest = {
     "./islands/BookDetail.tsx": $BookDetail,
     "./islands/BookForm.tsx": $BookForm,
     "./islands/BookList.tsx": $BookList,
+    "./islands/StockManager.tsx": $StockManager,
   },
   baseUrl: import.meta.url,
 } satisfies Manifest;

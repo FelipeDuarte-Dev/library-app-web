@@ -101,4 +101,25 @@ export class BooksAPI {
     });
     return await response.json();
   }
+
+  static async updateStock(id: number, increment: number): Promise<ApiResponse<Book>> {
+    const bookResponse = await this.getBook(id);
+    
+    if (!bookResponse.success || !bookResponse.data) {
+      return bookResponse;
+    }
+
+    const currentStock = bookResponse.data.stock;
+    const newStock = Math.max(0, currentStock + increment); 
+
+    const response = await fetch(`${API_BASE_URL}/books/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ stock: newStock }),
+    });
+    
+    return await response.json();
+  }
 }
