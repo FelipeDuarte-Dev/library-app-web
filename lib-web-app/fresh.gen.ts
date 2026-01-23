@@ -4,34 +4,28 @@
 
 import * as $_404 from "./routes/_404.tsx";
 import * as $_app from "./routes/_app.tsx";
-import * as $api_joke from "./routes/api/joke.ts";
 import * as $books_id_edit from "./routes/books/[id]/edit.tsx";
 import * as $books_id_index from "./routes/books/[id]/index.tsx";
 import * as $books_new from "./routes/books/new.tsx";
-import * as $greet_name_ from "./routes/greet/[name].tsx";
 import * as $index from "./routes/index.tsx";
 import * as $BookDetail from "./islands/BookDetail.tsx";
 import * as $BookForm from "./islands/BookForm.tsx";
 import * as $BookList from "./islands/BookList.tsx";
-import * as $Counter from "./islands/Counter.tsx";
 import type { Manifest } from "$fresh/server.ts";
 
 const manifest = {
   routes: {
     "./routes/_404.tsx": $_404,
     "./routes/_app.tsx": $_app,
-    "./routes/api/joke.ts": $api_joke,
     "./routes/books/[id]/edit.tsx": $books_id_edit,
     "./routes/books/[id]/index.tsx": $books_id_index,
     "./routes/books/new.tsx": $books_new,
-    "./routes/greet/[name].tsx": $greet_name_,
     "./routes/index.tsx": $index,
   },
   islands: {
     "./islands/BookDetail.tsx": $BookDetail,
     "./islands/BookForm.tsx": $BookForm,
     "./islands/BookList.tsx": $BookList,
-    "./islands/Counter.tsx": $Counter,
   },
   baseUrl: import.meta.url,
 } satisfies Manifest;
